@@ -48,23 +48,12 @@ public class DataGenerator {
                 .log(LogDetail.ALL)
                 .build();
 
-        public static UserInfo registrationUser(String locale, boolean isActive) {
-            String status;
-            if (isActive) {
-                status = "active";
-            } else if (!isActive) {
-                status = "blocked";
-            } else {
-                status = null;
-            }
-
+        public static UserInfo registrationUser(String locale, String status) {
             UserInfo userInfo = new UserInfo(generateLogin(locale), generatePassword(locale), status);
-            Gson gson = new Gson();
-            String requestBody = gson.toJson(userInfo);
 
             given()
                     .spec(requestSpecification)
-                    .body(requestBody)
+                    .body(userInfo)
                     .when()
                     .post("/api/system/users")
                     .then()

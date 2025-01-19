@@ -19,7 +19,7 @@ public class AuthTest {
 
     @Test
     public void successAuth() {
-        DataGenerator.UserInfo userInfo = DataGenerator.Registration.registrationUser("en", true);
+        DataGenerator.UserInfo userInfo = DataGenerator.Registration.registrationUser("en", "active");
 
         String login = userInfo.getLogin();
         String password = userInfo.getPassword();
@@ -33,7 +33,7 @@ public class AuthTest {
 
     @Test
     public void authWithBlockedStatus() {
-        DataGenerator.UserInfo userInfo = DataGenerator.Registration.registrationUser("en", false);
+        DataGenerator.UserInfo userInfo = DataGenerator.Registration.registrationUser("en", "blocked");
 
         String login = userInfo.getLogin();
         String password = userInfo.getPassword();
@@ -50,12 +50,12 @@ public class AuthTest {
 
     @Test
     public void invalidLogin() {
-        DataGenerator.UserInfo userInfo = DataGenerator.Registration.registrationUser("en", true);
+        DataGenerator.UserInfo userInfo = DataGenerator.Registration.registrationUser("en", "active");
 
-        String login = userInfo.getLogin();
+        String login = DataGenerator.generateLogin("en");
         String password = userInfo.getPassword();
 
-        $("[data-test-id='login'] input").setValue(login + "test");
+        $("[data-test-id='login'] input").setValue(login);
         $("[data-test-id='password'] input").setValue(password);
         $("[data-test-id='action-login']").click();
 
@@ -67,13 +67,13 @@ public class AuthTest {
 
     @Test
     public void invalidPassword() {
-        DataGenerator.UserInfo userInfo = DataGenerator.Registration.registrationUser("en", true);
+        DataGenerator.UserInfo userInfo = DataGenerator.Registration.registrationUser("en", "active");
 
         String login = userInfo.getLogin();
-        String password = userInfo.getPassword();
+        String password = DataGenerator.generatePassword("en");
 
         $("[data-test-id='login'] input").setValue(login);
-        $("[data-test-id='password'] input").setValue(password + "test");
+        $("[data-test-id='password'] input").setValue(password);
         $("[data-test-id='action-login']").click();
 
         $(Selectors.byText("Ошибка")).shouldBe(Condition.visible, Duration.ofSeconds(2));
